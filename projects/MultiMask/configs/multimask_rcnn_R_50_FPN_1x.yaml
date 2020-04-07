@@ -1,0 +1,10 @@
+_BASE_: "Base-MultiMask-RCNN-FPN.yaml"
+MODEL:
+  WEIGHTS: "detectron2://ImageNetPretrained/MSRA/R-50.pkl"
+  MULTIMASK_ON: True
+  MASK_ON: True
+  RESNETS:
+    DEPTH: 50
+SOLVER:
+  IMS_PER_BATCH: 2
+  MAX_ITER: 100
