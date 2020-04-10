@@ -18,17 +18,25 @@ MODEL:
     # which is approximately 1000 proposals per-image since the default batch size for FPN is 2.
     POST_NMS_TOPK_TRAIN: 1000
     POST_NMS_TOPK_TEST: 1000
+
+  MULTIMASK_ON: True
   ROI_HEADS:
-    NAME: "StandardROIHeads"
+    NAME: "MultiMaskROIHeads"
     IN_FEATURES: ["p2", "p3", "p4", "p5"]
+    MULTIMASK_HEADS: ["ROI_CONTOUR_MASK_HEAD", "ROI_BOTTOM_MASK_HEAD"]
+    ROI_CONTOUR_MASK_HEAD:
+      NAME: "MaskRCNNConvUpsampleHead"
+      NUM_CONV: 4
+      POOLER_RESOLUTION: 14
+    ROI_BOTTOM_MASK_HEAD:
+      NAME: "MaskRCNNConvUpsampleHead"
+      NUM_CONV: 4
+      POOLER_RESOLUTION: 14
+    
   ROI_BOX_HEAD:
     NAME: "FastRCNNConvFCHead"
     NUM_FC: 2
     POOLER_RESOLUTION: 7
-  ROI_MULTIMASK_HEAD:
-    NAME: "MultiMaskRCNNConvUpsampleHead"
-#    NUM_CONV: 4
-    POOLER_RESOLUTION: 14
 DATASETS:
   TRAIN: ("tablewares",)
   TEST: ("tablewares",)

@@ -105,9 +105,15 @@ class MultiMaskROIHeads(StandardROIHeads):
             sampling_ratio=sampling_ratio,
             pooler_type=pooler_type,
         )
-        self.mask_head = build_mask_head(
-            cfg, ShapeSpec(channels=in_channels, width=pooler_resolution, height=pooler_resolution)
+        # build mask heads
+        self.mask_heads = [build_multimask_head(cfg, name, ShapeSpec(channels=in_channels, width=pooler_resolution, height=pooler_resolution)) for name in self.mask_names]
         )
+    def _register_mask_head(self, cfg):
+        for name in cfg.MODEL.ROI_HEADS.MULTIMASK_HEADS:
+            registry = Registry(name)
+            registry.__doc__ = """
+            Registry for multi-mask head named {}".format(name)
+            """
 
     def _forward_densepose(self, features, instances):
         """
@@ -170,3 +176,10 @@ class MultiMaskROIHeads(StandardROIHeads):
         else:
             instances = self._forward_densepose(features, instances)
         return instances, losses
+
+def build_multimask_head(cfg, name, input_shape):
+    """
+    Build a mask head defined by `cfg.MODEL.MULTIMASK_HEAD.NAMES`.
+    """
+    name = cfg.MODEL.ROI_MASK_HEAD.NAME
+    return ROI_MASK_HEAD_REGISTRY.get(name)(cfg, input_shape)

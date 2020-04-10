@@ -186,7 +186,7 @@ class BaseMaskRCNNHead(nn.Module):
 
 
 @ROI_MULTIMASK_HEAD_REGISTRY.register()
-class MultiMaskRCNNConvUpsampleHead(BaseMaskRCNNHead):
+class MultiMaskRCNNConvUpsampleHead(MaskRCNNConvUpsampleHead):
     """
     A mask head with several conv layers, plus an upsample layer (with `ConvTranspose2d`).
     """
@@ -250,9 +250,9 @@ class MultiMaskRCNNConvUpsampleHead(BaseMaskRCNNHead):
         return self.predictor(x)
 
 
-def build_multimask_head(cfg, input_shape):
+def build_multimask_head(cfg, name, input_shape):
     """
-    Build a mask head defined by `cfg.MODEL.ROI_MASK_HEAD.NAME`.
+    Build a mask head defined by `cfg.MODEL.MULTIMASK_HEAD.NAMES`.
     """
     name = cfg.MODEL.ROI_MASK_HEAD.NAME
-    return ROI_MASK_HEAD_REGISTRY.get(name)(cfg, input_shape)
+    return ROI_MULTIMASK_HEAD_REGISTRY.get(name)(cfg, input_shape)
