@@ -8,6 +8,7 @@ from detectron2.layers import Conv2d, ConvTranspose2d, ShapeSpec, cat, get_norm
 from detectron2.structures import Instances
 from detectron2.utils.events import get_event_storage
 from detectron2.utils.registry import Registry
+from detectron2.modeling import MaskRCNNConvUpsampleHead
 
 ROI_MULTIMASK_HEAD_REGISTRY = Registry("ROI_MULTIMASK_HEAD")
 ROI_MULTIMASK_HEAD_REGISTRY.__doc__ = """
@@ -186,7 +187,7 @@ class BaseMaskRCNNHead(nn.Module):
 
 
 @ROI_MULTIMASK_HEAD_REGISTRY.register()
-class MultiMaskRCNNConvUpsampleHead(MaskRCNNConvUpsampleHead):
+class MultiMaskRCNNHead(MaskRCNNConvUpsampleHead):
     """
     A mask head with several conv layers, plus an upsample layer (with `ConvTranspose2d`).
     """
