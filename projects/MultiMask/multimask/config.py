@@ -11,6 +11,5 @@ def add_multimask_config(cfg):
     _C = cfg
     _C.MODEL.__dict__[CN.NEW_ALLOWED] = True
     _C.NEW_ALLOWED = True
-    _C.NEW_ALLOWED = True
     _C.MODEL.MULTIMASK_ON = True
     _C.MODEL.ROI_HEADS.MASK_HEADS = []
