@@ -107,6 +107,13 @@ class MultiMaskRCNNConvUpsampleHead(BaseMaskRCNNHead):
             return {"loss_multimask[{}]".format(self.cfg_name): mask_rcnn_loss(x, instances, self.vis_period)}
         else:
             mask_rcnn_inference(x, instances)
+            # use cfg_name to multimask name
+            for instance in instances:
+                if not instance.has(self.cfg_name):
+                    # add cfg_name as 
+                    instance.set(self.cfg_name, instance.pred_masks)
+                else:
+                    instance.pred_multimasks[self.cfg_name] = instance.pred_masks
             return instances
 
     def layers(self, x):
